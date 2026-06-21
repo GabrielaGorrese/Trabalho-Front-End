@@ -1,16 +1,20 @@
-# React + Vite
+# Trabalho-Front-End
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Integrantes: Gabriela de Souza Gorrese e Isabela Zanette Martinello
 
-Currently, two official plugins are available:
+Matéria: Front-End
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Tema: ERP / Painel Operacional de
+Almoxarifado (B2B)
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Problema: Vender um produto sem estoque queima a imagem da
+Falkon. A equipe interna do galpão precisa de um painel de controle de alta usabilidade
+para atualizar o estoque físico em tempo real. Crie a seguinte aplicação:
+Uma tela de gerenciamento de estoque com Big Numbers ou tabelas modernas.
+Produtos com estoque zerado devem ter um visual crítico (vermelho/esgotado).
+Produtos com estoque de 1 a 3 unidades devem alertar "Estoque Baixo" (amarelo).
+Cada produto possui um link para "Ajustar Estoque". A página de ajustar Estoque é
+dedicada a atualizar as quantidades do produto selecionado. Deve conter botões
+rápidos de incremento e decremento (+ e -) ou um campo numérico. Ao salvar, atualiza
+a quantidade diretamente na base de dados (db.json) e retorna o usuário para a listagem
+atualizada.
