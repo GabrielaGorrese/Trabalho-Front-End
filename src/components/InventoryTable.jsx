@@ -32,7 +32,7 @@ function InventoryTable({ products, onSelectProduct }) {
   // Função para definir o badge de estoque e a cor de alerta
   const getStockStatus = (quantity) => {
     if (quantity === 0) {
-      return { label: 'Crítico / Esgotado', className: 'stock-badge critical' };
+      return { label: 'Esgotado', className: 'stock-badge critical' };
     } else if (quantity >= 1 && quantity <= 3) {
       return { label: 'Estoque Baixo', className: 'stock-badge warning' };
     } else {

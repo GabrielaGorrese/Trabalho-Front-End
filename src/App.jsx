@@ -9,8 +9,8 @@ function App() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
-  // Navegação: 'list' | 'adjust'
+
+  // Navegação 'list'
   const [view, setView] = useState('list');
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [toast, setToast] = useState(null);
@@ -63,11 +63,11 @@ function App() {
 
       // Re-carregar lista
       await fetchProducts();
-      
+
       // Mostrar mensagem de sucesso (toast)
       const updatedProduct = products.find(p => p.id === id);
       showToast(`Estoque do item "${updatedProduct?.nome}" atualizado para ${newQuantity} unidades!`);
-      
+
       // Voltar para listagem
       setView('list');
       setSelectedProduct(null);
@@ -130,29 +130,29 @@ function App() {
               <div className="fade-in">
                 {/* Big Numbers */}
                 <DashboardStats products={products} />
-                
+
                 {/* Tabela de Estoque */}
                 <div className="card-panel">
                   <div className="panel-header">
                     <h2>Estoque Geral</h2>
                     <span className="panel-subtitle">Lista de insumos e produtos para expedição</span>
                   </div>
-                  <InventoryTable 
-                    products={products} 
-                    onSelectProduct={handleSelectProduct} 
+                  <InventoryTable
+                    products={products}
+                    onSelectProduct={handleSelectProduct}
                   />
                 </div>
               </div>
             ) : (
               <div className="fade-in">
                 {/* Formulário de Ajuste */}
-                <AdjustStockForm 
-                  product={selectedProduct} 
-                  onSave={handleSaveStock} 
+                <AdjustStockForm
+                  product={selectedProduct}
+                  onSave={handleSaveStock}
                   onCancel={() => {
                     setView('list');
                     setSelectedProduct(null);
-                  }} 
+                  }}
                 />
               </div>
             )}
@@ -160,9 +160,8 @@ function App() {
         )}
       </main>
 
-      {/* Rodapé */}
       <footer className="erp-footer">
-        <p>&copy; {new Date().getFullYear()} Falkon Almoxarifado B2B. Todos os direitos reservados. Projeto Front-End.</p>
+        <p>&copy; {new Date().getFullYear()} Falkon Almoxarifado B2B. Todos os direitos reservados. </p>
       </footer>
     </div>
   );
