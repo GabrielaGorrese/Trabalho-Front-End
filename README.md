@@ -6,8 +6,8 @@ Matéria: Front-End
 
 Tema: ERP / Painel Operacional de Almoxarifado (B2B)
 
-Problema: Vender um produto sem estoque queima a imagem da Falkon. A equipe interna do galpão precisa de um painel de controle de alta usabilidade 
-para atualizar o estoque físico em tempo real. 
+Problema: Vender um produto sem estoque queima a imagem da Falkon. A equipe interna do galpão precisa de um painel de controle de alta usabilidade para atualizar o estoque físico em tempo real. 
+
 
 Crie a seguinte aplicação: Uma tela de gerenciamento de estoque com Big Numbers ou tabelas modernas.
 - Produtos com estoque zerado devem ter um visual crítico (vermelho/esgotado).
