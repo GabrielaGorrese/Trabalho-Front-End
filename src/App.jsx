@@ -1,99 +1,29 @@
-import { useState, useEffect } from 'react';
-import DashboardStats from './components/DashboardStats';
-import InventoryTable from './components/InventoryTable';
-import AdjustStockForm from './components/AdjustStockForm';
 import { RotateCw } from 'lucide-react';
+import { Routes, Route } from 'react-router-dom';
+import { useProducts } from './hooks/useProducts';
+import { useToast } from './hooks/useToast';
+import InventoryPage from './pages/InventoryPage';
+import AdjustStockPage from './pages/AdjustStockPage';
 import './App.css';
 
 function App() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  
-  // Navegação: 'list' | 'adjust'
-  const [view, setView] = useState('list');
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [toast, setToast] = useState(null);
-
-  // URL base da API do json-server
-  const API_URL = 'http://localhost:3001/produtos';
-
-  const fetchProducts = async (forceLoading = false) => {
-    if (forceLoading) {
-      setLoading(true);
-    }
-    try {
-      const response = await fetch(API_URL);
-      if (!response.ok) {
-        throw new Error('Falha ao conectar com o banco de dados.');
-      }
-      const data = await response.json();
-      setProducts(data);
-      setError(null);
-    } catch (err) {
-      console.error(err);
-      setError('Não foi possível carregar os dados. Certifique-se de que o servidor está rodando (npm run server).');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const handleSelectProduct = (product) => {
-    setSelectedProduct(product);
-    setView('adjust');
-  };
+  const { products, loading, error, fetchProducts, updateProductStock } = useProducts();
+  const { toast, showToast } = useToast();
 
   const handleSaveStock = async (id, newQuantity) => {
-    try {
-      const response = await fetch(`${API_URL}/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ estoque: newQuantity }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Erro ao salvar no banco de dados.');
-      }
-
-      // Re-carregar lista
-      await fetchProducts();
-      
-      // Mostrar mensagem de sucesso (toast)
-      const updatedProduct = products.find(p => p.id === id);
-      showToast(`Estoque do item "${updatedProduct?.nome}" atualizado para ${newQuantity} unidades!`);
-      
-      // Voltar para listagem
-      setView('list');
-      setSelectedProduct(null);
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
-  };
-
-  const showToast = (message) => {
-    setToast(message);
-    setTimeout(() => {
-      setToast(null);
-    }, 4000);
+    await updateProductStock(id, newQuantity);
+    const updatedProduct = products.find((p) => String(p.id) === String(id));
+    showToast(`Estoque do item "${updatedProduct?.nome}" atualizado para ${newQuantity} unidades!`);
   };
 
   return (
     <div className="app-layout">
-      {/* Toast Notification */}
       {toast && (
         <div className="toast-notification">
           <span>{toast}</span>
         </div>
       )}
 
-      {/* Header do ERP */}
       <header className="erp-header">
         <div className="header-logo-area">
           <div className="logo-badge">F</div>
@@ -109,7 +39,6 @@ function App() {
         </button>
       </header>
 
-      {/* Conteúdo Principal */}
       <main className="erp-main">
         {loading && products.length === 0 ? (
           <div className="loader-container">
@@ -120,49 +49,35 @@ function App() {
           <div className="error-card">
             <h3>⚠️ Servidor Offline</h3>
             <p>{error}</p>
-            <button className="btn btn-primary" onClick={fetchProducts}>
+            <button className="btn btn-primary" onClick={() => fetchProducts(true)}>
               Tentar Novamente
             </button>
           </div>
         ) : (
-          <>
-            {view === 'list' ? (
-              <div className="fade-in">
-                {/* Big Numbers */}
-                <DashboardStats products={products} />
-                
-                {/* Tabela de Estoque */}
-                <div className="card-panel">
-                  <div className="panel-header">
-                    <h2>Estoque Geral</h2>
-                    <span className="panel-subtitle">Lista de insumos e produtos para expedição</span>
-                  </div>
-                  <InventoryTable 
-                    products={products} 
-                    onSelectProduct={handleSelectProduct} 
-                  />
-                </div>
-              </div>
-            ) : (
-              <div className="fade-in">
-                {/* Formulário de Ajuste */}
-                <AdjustStockForm 
-                  product={selectedProduct} 
-                  onSave={handleSaveStock} 
-                  onCancel={() => {
-                    setView('list');
-                    setSelectedProduct(null);
-                  }} 
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <InventoryPage
+                  products={products}
+                  loading={loading}
+                  error={error}
+                  onRefresh={() => fetchProducts(true)}
                 />
-              </div>
-            )}
-          </>
+              }
+            />
+            <Route
+              path="/adjust/:id"
+              element={
+                <AdjustStockPage products={products} onSaveStock={handleSaveStock} />
+              }
+            />
+          </Routes>
         )}
       </main>
 
-      {/* Rodapé */}
       <footer className="erp-footer">
-        <p>&copy; {new Date().getFullYear()} Falkon Almoxarifado B2B. Todos os direitos reservados. Projeto Front-End.</p>
+        <p>&copy; {new Date().getFullYear()} Falkon Almoxarifado B2B. Todos os direitos reservados.</p>
       </footer>
     </div>
   );
