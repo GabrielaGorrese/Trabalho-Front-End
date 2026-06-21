@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search, SlidersHorizontal, Edit2 } from 'lucide-react';
 
-function InventoryTable({ products, onSelectProduct }) {
+function InventoryTable({ products }) {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('todos');
 
@@ -112,7 +114,7 @@ function InventoryTable({ products, onSelectProduct }) {
                     <td>
                       <button 
                         className="action-btn"
-                        onClick={() => onSelectProduct(product)}
+                        onClick={() => navigate(`/adjust/${product.id}`)}
                       >
                         <Edit2 size={14} />
                         Ajustar Estoque
